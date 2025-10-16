@@ -6,7 +6,7 @@ RUN rm -rf /etc/nginx/conf.d/*
 
 # Copia os arquivos de build do seu projeto para o diretório de serviço do Nginx
 # Certifique-se de que o caminho /home/ubuntu/site_casa_caramelo/dist corresponde ao seu diretório de build
-COPY ./dist /usr/share/nginx/html
+COPY /usr/share/nginx/html
 
 # Copia a configuração personalizada do Nginx
 COPY nginx.conf /etc/nginx/conf.d/default.conf
@@ -16,3 +16,4 @@ EXPOSE 80
 
 # Inicia o Nginx em primeiro plano
 CMD ["nginx", "-g", "daemon off;"]
+
