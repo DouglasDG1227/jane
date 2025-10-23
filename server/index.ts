@@ -10,13 +10,18 @@ async function startServer() {
   const app = express();
   const server = createServer(app);
 
-  // Serve static files gerados pelo Vite em produção
+  // Serve arquivos estáticos gerados pelo Vite
   const staticPath =
     process.env.NODE_ENV === "production"
       ? path.resolve(__dirname, "../dist")
       : path.resolve(__dirname, "..", "dist");
 
   app.use(express.static(staticPath));
+
+  // Rota de verificação para o painel
+  app.get("/health", (_req, res) => {
+    res.status(200).send("OK");
+  });
 
   // Roteamento SPA: serve index.html para todas as rotas
   app.get("*", (_req, res) => {
