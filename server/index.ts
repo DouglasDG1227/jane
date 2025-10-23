@@ -13,8 +13,8 @@ async function startServer() {
   // Serve arquivos estáticos gerados pelo Vite
   const staticPath =
     process.env.NODE_ENV === "production"
-      ? path.resolve(__dirname, "../dist")
-      : path.resolve(__dirname, "..", "dist");
+      ? path.resolve(__dirname, "../dist/public")
+      : path.resolve(__dirname, "..", "dist", "public");
 
   app.use(express.static(staticPath));
 
