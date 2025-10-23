@@ -1,45 +1,38 @@
-# Build stage
+# 🔧 Build stage
 FROM node:22-alpine AS builder
 
 WORKDIR /app
 
-# Copy package files
+# Instala pnpm e dependências
 COPY package.json pnpm-lock.yaml ./
-
-# Install dependencies
 RUN npm install -g pnpm && pnpm install --frozen-lockfile
 
-# Copy full source code
+# Copia todo o código-fonte
 COPY . .
 
-# Build front-end (assumindo que o Vite está na pasta client)
-WORKDIR /app/client
+# Executa o build do front-end e do back-end
 RUN pnpm run build
 
-# Return to root to prepare server
-WORKDIR /app
-
-# Production stage
+# 🏁 Production stage
 FROM node:22-alpine
 
 WORKDIR /app
 
-# Install pnpm
+# Instala pnpm
 RUN npm install -g pnpm
 
-# Copy package files
+# Copia arquivos de configuração
 COPY package.json pnpm-lock.yaml ./
-
-# Install production dependencies only
 RUN pnpm install --frozen-lockfile --prod
 
-# Copy built files from builder
-COPY --from=builder /app/client/dist ./client/dist
+# Copia arquivos gerados e fontes
+COPY --from=builder /app/dist/public ./client/dist
+COPY --from=builder /app/dist/index.js ./dist/index.js
 COPY --from=builder /app/server ./server
 COPY --from=builder /app/shared ./shared
 
-# Expose port
+# Expõe a porta usada pelo servidor
 EXPOSE 3000
 
-# Start the application
+# Inicia a aplicação
 CMD ["pnpm", "start"]
