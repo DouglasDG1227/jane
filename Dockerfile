@@ -26,7 +26,7 @@ COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile --prod
 
 # Copia arquivos gerados e fontes
-COPY --from=builder /app/dist/public ./client/dist
+COPY --from=builder /app/dist/public ./dist/public
 COPY --from=builder /app/dist/index.js ./dist/index.js
 COPY --from=builder /app/server ./server
 COPY --from=builder /app/shared ./shared
